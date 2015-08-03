@@ -123,6 +123,7 @@
       <root url="file://$PROJECT_DIR$/../../tts/go_webtest/artnet_test/cmd/assets/node_modules/gulp-util/node_modules/dateformat/node_modules/meow/node_modules/.bin" />
       <root url="file://$PROJECT_DIR$/../../tts/goimech/.idea" />
       <root url="file://$PROJECT_DIR$/../../tts/go_webtest/artnet_test/.idea" />
+      <root url="file://$PROJECT_DIR$/.git" />
       <root url="file://$PROJECT_DIR$/../iswextgui/.git" />
       <root url="file://$PROJECT_DIR$/../../tts/go_webtest/artnet_test/cmd/assets/node_modules/envify/node_modules/jstransform/src/__tests__" />
       <root url="file://$PROJECT_DIR$/../../tts/go_webtest/artnet_test/cmd/assets/node_modules/gulp/node_modules/vinyl-fs/node_modules/.bin" />

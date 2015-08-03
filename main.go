@@ -17,6 +17,44 @@ import (
 
 
 
+
+/*
+Форма создания файла
+
+<form action="/admin/editor/index.php?save" method="post">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tbody><tr>
+<td width="100%">
+<input style="background-color:#FFFFFF; color:#0000FF; width:100%;" type="text" id="doc_title" name="doc_title" value="">
+</td>
+<td><select name="parent_id"><option value="0">Место размещения</option><option value="68">Карта сайта</option><option value="48">О компании</option><option value="61">Прайс</option><option value="62">Продукция</option><option value="97">Связь</option></select></td>
+<td><select name="lang_id" id="lang_id"><option value="ru" selected="">Русский</option></select></td>
+<td><input type="text" name="doc_ident" value=""></td>
+</tr>
+</tbody></table>
+<input type="hidden" id="DocumentContent" name="DocumentContent" value="" style="display:none"><input type="hidden" id="DocumentContent___Config" value="AutoDetectLanguage=false&amp;DefaultLanguage=ru" style="display:none"><iframe id="DocumentContent___Frame" src="editor/fckeditor.html?InstanceName=DocumentContent&amp;Toolbar=Default" width="100%" height="500" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; width: 100%; height: 500px; background-image: none; background-color: transparent;"></iframe>
+<input type="hidden" name="cat" value="">
+<input type="hidden" name="doc_id" value="">
+<table width="100%" border="0" cellpadding="4" cellspacing="2">
+<tbody><tr><td colspan="2"><h3>Для раскрутки страницы</h3><hr></td></tr>
+<tr>
+<td>Заголовок страницы (title)</td>
+<td width="90%"><input style="color:#0000FF;width:100%;" type="text" name="title" value=""></td>
+</tr>
+<tr>
+<td>Описание (description)</td>
+<td width="90%"><input style="color:#0000FF;width:100%;" type="text" name="descr" value=""></td>
+</tr>
+<tr>
+<td>Ключевые слова (keywords)</td>
+<td width="90%"><input style="color:#0000FF;width:100%;" type="text" name="kw" value=""></td>
+</tr>
+</tbody></table></form>
+
+
+ */
+
+
 /*
 Форма логина
 <form action="" method="POST">
@@ -44,19 +82,23 @@ func (ai *adminIface) processBody(b []byte){
 	}
 
 	var state_m int
+	var editUrl string
+	var found bool
 
 	var f func(*html.Node)
 	f = func(n *html.Node) {
 		if n.Type == html.ElementNode{
-
-
+			if found {
+				return
+			}
 			switch state_m{
 			case 0: // Поиск a
 				if  n.Data == "a" {
 					for _, a := range n.Attr {
 						if a.Key == "href" {
 							if strings.Contains(a.Val, "editor"){
-								fmt.Println("OPENING ",a.Val)
+								editUrl = a.Val
+								//fmt.Println("OPENING ",a.Val)
 								state_m  = 1
 							}
 							break
@@ -65,14 +107,18 @@ func (ai *adminIface) processBody(b []byte){
 				}
 			case 1:
 				if n.Data == "b"{
-					fmt.Println("B1 FOUND")
+					//fmt.Println("B1 FOUND")
 					state_m = 2
 				}
 			case 2:
 				if n.Data == "b"{
-					fmt.Println("B2 FOUND")
-					fmt.Printf("Node: %#v\n", n)
-					fmt.Printf("Child: %#v\n", n.FirstChild)
+					//fmt.Println("B2 FOUND")
+					//fmt.Printf("Node: %#v\n", n)
+					fmt.Printf("Child: %#v\n", n.FirstChild.Data)
+					if n.FirstChild.Data == "contacts"{
+						found = true
+						return
+					}
 					state_m = 3
 				}
 			case 3:
@@ -80,7 +126,7 @@ func (ai *adminIface) processBody(b []byte){
 					for _, a := range n.Attr {
 						if a.Key == "href" {
 							if strings.Contains(a.Val, "editor"){
-								fmt.Println("CLOSING ",a.Val)
+								//fmt.Println("CLOSING ",a.Val)
 								state_m  = 0
 							}
 							break
@@ -98,6 +144,11 @@ func (ai *adminIface) processBody(b []byte){
 		}
 	}
 	f(doc)
+
+
+	if found {
+		log.Printf("Found page: %s", editUrl)
+	}
 }
 
 func (ai *adminIface) getSession() bool{
