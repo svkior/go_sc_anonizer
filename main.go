@@ -84,7 +84,7 @@ func (ai *adminIface) createNewPage(){
 	client := &http.Client{
 		Jar: jar,
 	}
-	req, _ := http.NewRequest("GET", "http://www.scircus.ru/admin/new/index.php", nil)
+	req, _ := http.NewRequest("GET", "http://www.scircus.ru/admin/?a=adddoc", nil)
 	resp, err := client.Do(req)
 	if err != nil {
 		panic(err)
@@ -233,13 +233,14 @@ func (ai *adminIface) getLogin() bool{
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
 	if resp.StatusCode == 200{
-		ai.cookies = resp.Cookies()
-		log.Println(ai.cookies)
 		ai.loggedIn = true
-		ai.processBody(body)
+
+		log.Printf("COOKIES: %#v",resp.Cookies())
+		//ai.processBody(body)
 		return true
 	} else {
 		log.Println(resp)
+		log.Println(body)
 		return false
 	}
 }
