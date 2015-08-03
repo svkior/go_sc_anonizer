@@ -15,7 +15,7 @@ import (
 	"strconv"
 )
 
-
+const PAGE_ID = "contacts1"
 
 
 /*
@@ -72,7 +72,50 @@ type adminIface struct {
 	client *http.Client
 }
 
-func (ai *adminIface) processBody(b []byte){
+func (ai *adminIface) createNewPage(){
+	log.Println("Need to create New Page")
+	jar, _ := cookiejar.New(nil)
+	cookieURL, _ := url.Parse("/") // http://www.scircus.ru/admin/index.php
+
+	jar.SetCookies(cookieURL, ai.cookies)
+
+	// sanity check
+	fmt.Println(jar.Cookies(cookieURL))
+	client := &http.Client{
+		Jar: jar,
+	}
+	req, _ := http.NewRequest("GET", "http://www.scircus.ru/admin/new/index.php", nil)
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	body, _ := ioutil.ReadAll(resp.Body)
+	resp.Body.Close()
+	log.Println(string(body))
+
+	r := bytes.NewReader(body)
+	doc, err := html.Parse(r)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var f func(string, *html.Node)
+	f = func(pre string, n *html.Node) {
+		if n.Type == html.ElementNode {
+			log.Println(pre,n.Data)
+		}
+
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			f(pre+">", c)
+		}
+	}
+	f(">", doc)
+}
+
+func (ai *adminIface) updateOldPage(url string){
+	log.Printf("Need to update Old Page:%s", url)
+}
+
+func (ai *adminIface) processBody(b []byte) bool{
 //	log.Println(string(b))
 
 	r := bytes.NewReader(b)
@@ -115,7 +158,7 @@ func (ai *adminIface) processBody(b []byte){
 					//fmt.Println("B2 FOUND")
 					//fmt.Printf("Node: %#v\n", n)
 					fmt.Printf("Child: %#v\n", n.FirstChild.Data)
-					if n.FirstChild.Data == "contacts"{
+					if n.FirstChild.Data == PAGE_ID{
 						found = true
 						return
 					}
@@ -148,7 +191,12 @@ func (ai *adminIface) processBody(b []byte){
 
 	if found {
 		log.Printf("Found page: %s", editUrl)
+		ai.updateOldPage(editUrl)
+	} else {
+		log.Println("Page is not found")
+		ai.createNewPage()
 	}
+	return found
 }
 
 func (ai *adminIface) getSession() bool{
