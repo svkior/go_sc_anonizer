@@ -7,10 +7,8 @@ import (
 	"log"
 	"net/http/cookiejar"
 	"net/url"
-	"fmt"
 	"time"
 	"golang.org/x/net/html"
-	"strings"
 )
 
 type adminIface struct {
@@ -92,89 +90,6 @@ func (ai *adminIface) updateOldPage(url string){
 	log.Printf("Need to update Old Page:%s", url)
 }
 
-func (ai *adminIface) processBody(b []byte) bool{
-	//	log.Println(string(b))
-
-	r := bytes.NewReader(b)
-	doc, err := html.Parse(r)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var state_m int
-	var editUrl string
-	var found bool
-
-	var f func(*html.Node)
-	f = func(n *html.Node) {
-		if n.Type == html.ElementNode{
-			if found {
-				return
-			}
-			switch state_m{
-			case 0: // Поиск a
-				if  n.Data == "a" {
-					for _, a := range n.Attr {
-						if a.Key == "href" {
-							if strings.Contains(a.Val, "editor"){
-								editUrl = a.Val
-								//fmt.Println("OPENING ",a.Val)
-								state_m  = 1
-							}
-							break
-						}
-					}
-				}
-			case 1:
-				if n.Data == "b"{
-					//fmt.Println("B1 FOUND")
-					state_m = 2
-				}
-			case 2:
-				if n.Data == "b"{
-					//fmt.Println("B2 FOUND")
-					//fmt.Printf("Node: %#v\n", n)
-					fmt.Printf("Child: %#v\n", n.FirstChild.Data)
-					if n.FirstChild.Data == PAGE_ID{
-						found = true
-						return
-					}
-					state_m = 3
-				}
-			case 3:
-				if  n.Data == "a" {
-					for _, a := range n.Attr {
-						if a.Key == "href" {
-							if strings.Contains(a.Val, "editor"){
-								//fmt.Println("CLOSING ",a.Val)
-								state_m  = 0
-							}
-							break
-						}
-					}
-				}
-			default:
-				state_m = 0
-			}
-
-			//log.Println(n.Data)
-		}
-		for c := n.FirstChild; c != nil; c = c.NextSibling {
-			f(c)
-		}
-	}
-	f(doc)
-
-
-	if found {
-		log.Printf("Found page: %s", editUrl)
-		ai.updateOldPage(editUrl)
-	} else {
-		log.Println("Page is not found")
-		ai.createNewPage()
-	}
-	return found
-}
 
 func (ai *adminIface) getSession() bool{
 	resp, err := http.Get("http://www.scircus.ru/admin/index.php")
@@ -188,7 +103,7 @@ func (ai *adminIface) getSession() bool{
 	return true
 }
 
-func (ai *adminIface) getLogin() bool{
+func (ai *adminIface) getLogin() (bool, []byte) {
 	jar, _ := cookiejar.New(nil)
 	cookieURL, _ := url.Parse("/") // http://www.scircus.ru/admin/index.php
 	jar.SetCookies(cookieURL, ai.cookies)
@@ -213,35 +128,27 @@ func (ai *adminIface) getLogin() bool{
 		ai.loggedIn = true
 
 		//log.Printf("COOKIES: %#v",resp.Cookies())
-		ai.processBody(body)
-		return true
+		//ai.processBody(body)
+		return true, body
 	} else {
 		log.Println(resp)
 		log.Println(body)
-		return false
+		return false, nil
 	}
 }
 
 
-func (ai *adminIface) getListOfPages() {
-	jar, _ := cookiejar.New(nil)
-	cookieURL, _ := url.Parse("/") // http://www.scircus.ru/admin/index.php
+func (ai *adminIface) getEditorContents(getUrl string) []byte{
+	time.Sleep(500 * time.Millisecond)
 
-	jar.SetCookies(cookieURL, ai.cookies)
-
-	// sanity check
-	fmt.Println(jar.Cookies(cookieURL))
-	client := &http.Client{
-		Jar: jar,
-	}
-	req, _ := http.NewRequest("GET", "http://www.scircus.ru/admin/index.php", nil)
-	resp, err := client.Do(req)
+	req, _ := http.NewRequest("GET", getUrl, nil)
+	resp, err := ai.client.Do(req)
 	if err != nil {
 		panic(err)
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 	resp.Body.Close()
-	ai.processBody(body)
+	return body
 }
 
 func (ai *adminIface) DoTheJob(){

@@ -6,6 +6,7 @@ import (
 	"golang.org/x/net/html"
 	"net/url"
 	"os"
+	"bytes"
 )
 
 
@@ -48,18 +49,140 @@ func (m *MPage) AddYellowPageRemover(){
 func NewSiteWatcher() *SiteWatcher{
 	sw := SiteWatcher{
 		Pages: make(map [string]MPage),
-		Ai: adminIface{},
+		Ai: &adminIface{},
 	}
 
 	sw.Ai.getSession()
-	sw.Ai.getLogin()
-	return *sw
+	_, body := sw.Ai.getLogin()
+	sw.ProcessPages(body)
+	//log.Println(string(body))
+	return &sw
 }
 
 type SiteWatcher struct {
 	Pages  map[string]MPage
 	Ai *adminIface
 }
+
+
+func (sw *SiteWatcher) DownloadPage(nam string, url string){
+	fullURL := "http://www.scircus.ru/admin/" + url
+	log.Printf("Downloading page: %s from url: %s", nam, fullURL)
+
+	body := sw.Ai.getEditorContents(fullURL)
+
+	//log.Println(string(body))
+	r := bytes.NewReader(body)
+	doc, err := html.Parse(r)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var f func(*html.Node)
+	f = func(n *html.Node) {
+		if n.Type == html.ElementNode {
+			//log.Println(n.Data)
+			if n.Data == "input" {
+
+				for _, a := range n.Attr {
+					if a.Key == "name" {
+						//log.Println(n.Data, a.Key, a.Val)
+
+						switch a.Val{
+						case "doc_title":
+							log.Println("Doc Title", a.Key)
+						}
+
+						break
+					}
+				}
+			} else {
+
+			}
+		}
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			f(c)
+		}
+
+	}
+
+	f(doc)
+}
+
+func (s *SiteWatcher) ProcessPages(b []byte){
+		//	log.Println(string(b))
+
+	r := bytes.NewReader(b)
+	doc, err := html.Parse(r)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var state_m int
+	var editUrl string
+	var found bool
+
+	var f func(*html.Node)
+	f = func(n *html.Node) {
+		if n.Type == html.ElementNode{
+			if found {
+				return
+			}
+			switch state_m{
+			case 0: // Поиск a
+				if  n.Data == "a" {
+					for _, a := range n.Attr {
+						if a.Key == "href" {
+							if strings.Contains(a.Val, "editor"){
+								editUrl = a.Val
+								//fmt.Println("OPENING ",a.Val)
+								state_m  = 1
+							}
+							break
+						}
+					}
+				}
+			case 1:
+				if n.Data == "b"{
+					//fmt.Println("B1 FOUND")
+					state_m = 2
+				}
+			case 2:
+				if n.Data == "b"{
+					//fmt.Println("B2 FOUND")
+					//fmt.Printf("Node: %#v\n", n)
+
+					//log.Printf("%s : %s ", editUrl, n.FirstChild.Data)
+					s.DownloadPage(n.FirstChild.Data, editUrl)
+					//fmt.Printf("Child: %#v\n", n.FirstChild.Data)
+					state_m = 3
+				}
+			case 3:
+				if  n.Data == "a" {
+					for _, a := range n.Attr {
+						if a.Key == "href" {
+							if strings.Contains(a.Val, "editor"){
+								//fmt.Println("CLOSING ",a.Val)
+								state_m  = 0
+							}
+							break
+						}
+					}
+				}
+			default:
+				state_m = 0
+			}
+
+			//log.Println(n.Data)
+		}
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			f(c)
+		}
+	}
+	f(doc)
+
+}
+
 
 func (s *SiteWatcher) AddPage(page string){
 
