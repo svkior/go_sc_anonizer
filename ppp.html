@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+
+<td class="content"><div>
+    <h1 style="text-align: center;"><span style="font-size: medium;">ООО «Стройцирк»</span></h1>
+    <h2 style="text-align: center;"><span style="font-size: medium;">+7 (495) 969-63-56</span></h2>
+    <h2 style="text-align: center;"><span style="font-size: medium;">+7 (495) 542-17-72</span></h2>
+    <h2 style="text-align: center;"><span style="font-size: medium;">E-mail: scircus2@list.ru</span></h2>
+    <p>&nbsp;</p>
+    <h3 align="center" style="text-align: center; background-image: initial; background-attachment: initial; background-size: initial; background-origin: initial; background-clip: initial; background-position: initial; background-repeat: initial;">&nbsp;</h3>
+    <div id="contactsss">
+        <h1 style="text-align: center;">
+            <span style="font-size: medium;">ООО «Театральные Технологические Системы»</span>
+        </h1>
+        <h2 style="text-align: center;">
+            <span style="font-size: medium;">+7 (495) 730-83-45</span>
+        </h2>
+        <h2 style="text-align: center;">
+            <span style="font-size: medium;">+7 (495) 730-83-46</span>
+        </h2>
+        <h2 style="text-align: center;">
+            <span style="font-size: medium;">+7 (499) 649-29-40</span>
+        </h2>
+        <p>&nbsp;</p>
+        <h2 style="text-align: center;">
+            <span style="font-size: medium;"><a href="mailto:info@ttsy.ru">info@ttsy.ru</a></span>
+        </h2>
+        <h2 style="text-align: center;">
+            <span style="font-size: medium;"><a href="http://www.ttsy.ru/">www.ttsy.ru</a></span>
+        </h2>
+    </div>
+    <script>
+        var inc = 0;
+        var timer = setInterval(function(){
+            if(inc < 1){
+                document.getElementById("contactsss").innerHTML =
+                        '<h1 style="text-align: center;"><span style="font-size: medium;">ООО &laquo;Театральные Технологические Системы&raquo;</span></h1>'
+                        +'<h2 style="text-align: center;"><span style="font-size: medium;">+7 (495) 730-83-45</span></h2>'
+                        +'<h2 style="text-align: center;"><span style="font-size: medium;">+7 (495) 730-83-46</span></h2>'
+                        +'<h2 style="text-align: center;"><span style="font-size: medium;">+7 (499) 649-29-40</span></h2>'
+                        +'<p>&nbsp;</p>'
+                        +'<h2 style="text-align: center;"><span style="font-size: medium;"><a href="mailto:info@ttsy.ru">info@ttsy.ru</a></span></h2>'
+                        +'<h2 style="text-align: center;"><span style="font-size: medium;"><a href="http://www.ttsy.ru/">www.ttsy.ru</a></span></h2>';
+                inc = inc + 1
+            } else {
+                clearInterval(timer);
+            }
+        }, 100)
+
+        qq = document.querySelector("#topright");
+        qq.style.backgroundImage = "url(http://support.ttsy.ru/topright.gif)";
+        //foot = document.querySelectorAll("#footer tr td span")[2];
+        //foot.innerHTML = 'тел.: +7 (495) 969-63-56; +7 (495) 542-17-72 | e-mail: scircus2@list.ru | +7 (495) 730-83-45 | e-mail: <a href="mailto:info@ttsy.ru">info@ttsy.ru</a>';
+    </script></div></td>
+
+</body>
+</html>

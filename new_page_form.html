@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Sample page.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>��������</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="../../style.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="fckeditor.js"></script>
+    <script type="text/javascript">
+        <!--
+        //-->
+    </script>
+</head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<form action="/admin/editor/index.php?save" method="post">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width="100%">
+                <input style="background-color:#FFFFFF; color:#0000FF; width:100%;" type="text" id="doc_title" name="doc_title" value="">
+            </td>
+            <td><select name="parent_id"><option value="0">����� ����������</option><option value="68">����� �����</option><option value="48">� ��������</option><option value="61">�����</option><option value="62">���������</option><option value="97">�����</option></select></td>
+            <td><select name="lang_id" id="lang_id"><option value="ru" selected>�������</option></select></td>
+            <td><input type="text" name="doc_ident" value=""></td>
+        </tr>
+    </table>
+    <textarea name="DocumentContent" rows="4" cols="40" style="width: 100%; height: 500px"></textarea>
+    <input type="hidden" name="cat" value="">
+    <input type="hidden" name="doc_id" value="">
+    <table width="100%" border="0" cellpadding="4" cellspacing="2">
+        <tr><td colspan="2"><h3>��� ��������� ��������</h3><HR></td></tr>
+        <tr>
+            <td>��������� �������� (title)</td>
+            <td width="90%"><input style="color:#0000FF;width:100%;" type="text" name="title" value=""></td>
+        </tr>
+        <tr>
+            <td>�������� (description)</td>
+            <td width="90%"><input style="color:#0000FF;width:100%;" type="text" name="descr" value=""></td>
+        </tr>
+        <tr>
+            <td>�������� ����� (keywords)</td>
+            <td width="90%"><input style="color:#0000FF;width:100%;" type="text" name="kw" value=""></td>
+        </tr>
+    </table></form>
+</body>
+</html>

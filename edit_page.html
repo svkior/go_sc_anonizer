@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+    <title>Редактор</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+    <meta name="robots" content="noindex, nofollow">
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="../../style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="fckeditor.js"></script>
+    <script type="text/javascript">
+        <!--
+        //-->
+    </script>
+    <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+    .en-markup-crop-options {
+        top: 18px !important;
+        left: 50% !important;
+        margin-left: -100px !important;
+        width: 200px !important;
+        border: 2px rgba(255,255,255,.38) solid !important;
+        border-radius: 4px !important;
+    }
+
+    .en-markup-crop-options div div:first-of-type {
+        margin-left: 0px !important;
+    }
+    </style></head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<form action="/admin/editor/index.php?save" method="post">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tbody><tr>
+            <td width="100%">
+                <input style="background-color:#FFFFFF; color:#0000FF; width:100%;" type="text" id="doc_title" name="doc_title" value="Сообщение">
+            </td>
+            <td><select name="parent_id"><option value="0">Место размещения</option><option value="68">Карта сайта</option><option value="102">Контакты</option><option value="48">О компании</option><option value="61">Прайс</option><option value="62">Продукция</option><option value="104">Сообщение</option><option value="66">Схема проезда</option></select></td>
+            <td><select name="lang_id" id="lang_id"><option value="ru" selected="">Русский</option></select></td>
+            <td><input type="text" name="doc_ident" value="contacts"></td>
+        </tr>
+        </tbody></table>
+    <input type="hidden" id="DocumentContent" name="DocumentContent" value="<h1>Привет Мир</h1>" style="display:none"><input type="hidden" id="DocumentContent___Config" value="AutoDetectLanguage=false&amp;DefaultLanguage=ru" style="display:none"><iframe id="DocumentContent___Frame" src="editor/fckeditor.html?InstanceName=DocumentContent&amp;Toolbar=Default" width="100%" height="500" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; width: 100%; height: 500px; background-image: none; background-color: transparent;"></iframe>
+    <input type="hidden" name="cat" value="">
+    <input type="hidden" name="doc_id" value="104">
+    <table width="100%" border="0" cellpadding="4" cellspacing="2">
+        <tbody><tr><td colspan="2"><h3>Для раскрутки страницы</h3><hr></td></tr>
+        <tr>
+            <td>Заголовок страницы (title)</td>
+            <td width="90%"><input style="color:#0000FF;width:100%;" type="text" name="title" value=""></td>
+        </tr>
+        <tr>
+            <td>Описание (description)</td>
+            <td width="90%"><input style="color:#0000FF;width:100%;" type="text" name="descr" value=""></td>
+        </tr>
+        <tr>
+            <td>Ключевые слова (keywords)</td>
+            <td width="90%"><input style="color:#0000FF;width:100%;" type="text" name="kw" value=""></td>
+        </tr>
+        </tbody></table></form>
+
+
+<iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; height: 0px; width: 0px; position: absolute; z-index: 10000; left: 320px; top: 208px; background-image: none; background-color: transparent;" width="1" height="1"></iframe><iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; height: 0px; width: 0px; position: absolute; z-index: 10000; background-image: none; background-color: transparent;"></iframe><iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; height: 0px; width: 0px; position: absolute; z-index: 10000; background-image: none; background-color: transparent;"></iframe><iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; height: 0px; width: 0px; position: absolute; z-index: 10000; background-image: none; background-color: transparent;"></iframe><iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; height: 0px; width: 0px; position: absolute; z-index: 10000; background-image: none; background-color: transparent;"></iframe><iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; height: 0px; width: 0px; position: absolute; z-index: 10000; background-image: none; background-color: transparent;"></iframe><iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; height: 0px; width: 0px; position: absolute; z-index: 10000; background-image: none; background-color: transparent;"></iframe><iframe frameborder="0" scrolling="no" style="border: 0px; display: none; background-color: transparent;"></iframe><div id="GOOGLE_INPUT_CHEXT_FLAG" style="display: none;" input="null" input_stat="{&quot;tlang&quot;:true,&quot;tsbc&quot;:true,&quot;pun&quot;:true,&quot;mk&quot;:false,&quot;ss&quot;:true}"></div></body><script>window.FCKeditorAPI = {Version : "2.6.2",VersionBuild : "19417",Instances : new Object(),GetInstance : function( name ){return this.Instances[ name ];},_FormSubmit : function(){for ( var name in FCKeditorAPI.Instances ){var oEditor = FCKeditorAPI.Instances[ name ] ;if ( oEditor.GetParentForm && oEditor.GetParentForm() == this )oEditor.UpdateLinkedField() ;}this._FCKOriginalSubmit() ;},_FunctionQueue	: {Functions : new Array(),IsRunning : false,Add : function( f ){this.Functions.push( f );if ( !this.IsRunning )this.StartNext();},StartNext : function(){var aQueue = this.Functions ;if ( aQueue.length > 0 ){this.IsRunning = true;aQueue[0].call();}else this.IsRunning = false;},Remove : function( f ){var aQueue = this.Functions;var i = 0, fFunc;while( (fFunc = aQueue[ i ]) ){if ( fFunc == f )aQueue.splice( i,1 );i++ ;}this.StartNext();}}}</script></html>
