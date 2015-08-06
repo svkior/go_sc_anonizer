@@ -7,6 +7,8 @@ import (
 	"net/url"
 	"os"
 	"bytes"
+	"encoding/json"
+	"io/ioutil"
 )
 
 
@@ -46,9 +48,25 @@ func (m *MPage) AddYellowPageRemover(){
 	`
 }
 
+
+func (m *MPage) AddGoogleAnalytics(){
+	m.DocContent +=`
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-66058123-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+`
+}
+
 func NewSiteWatcher() *SiteWatcher{
 	sw := SiteWatcher{
-		Pages: make(map [string]MPage),
+		Pages: make(map [string]*MPage),
 		Ai: &adminIface{},
 	}
 
@@ -60,9 +78,10 @@ func NewSiteWatcher() *SiteWatcher{
 }
 
 type SiteWatcher struct {
-	Pages  map[string]MPage
+	Pages  map[string]*MPage
 	Ai *adminIface
 }
+
 
 
 func (sw *SiteWatcher) DownloadPage(nam string, url string){
@@ -78,26 +97,56 @@ func (sw *SiteWatcher) DownloadPage(nam string, url string){
 		log.Fatal(err)
 	}
 
+	m := MPage{}
+
 	var f func(*html.Node)
 	f = func(n *html.Node) {
 		if n.Type == html.ElementNode {
-			//log.Println(n.Data)
 			if n.Data == "input" {
-
+				//log.Println(n.Data, n.Attr)
+				hasName := false
+				hasValue := false
+				strName := ""
+				strValue := ""
 				for _, a := range n.Attr {
-					if a.Key == "name" {
-						//log.Println(n.Data, a.Key, a.Val)
-
-						switch a.Val{
-						case "doc_title":
-							log.Println("Doc Title", a.Key)
-						}
-
+					switch a.Key{
+					case "name":
+						strName = a.Val
+						hasName = true
+					case "value":
+						strValue = ConvertCP2U(a.Val)
+						hasValue = true
+					}
+					if hasName && hasValue {
 						break
 					}
 				}
-			} else {
 
+				if hasName && hasValue {
+					//log.Printf("We got param %s : %s", strName, strValue)
+					switch strName{
+					case "kw":
+						m.Kw = strValue
+					case "descr":
+						m.Descr = strValue
+					case "title":
+						m.Title = strValue
+					case "doc_id":
+						m.DocId = strValue
+					case "cat":
+						m.Cat = strValue
+					case "doc_ident":
+						m.DocIdent = strValue
+					case "doc_title":
+						m.DocTitle = strValue
+					}
+				}
+			} else if n.Data == "textarea"{
+				w := bytes.NewBuffer(nil)
+				html.Render(w, n.FirstChild)
+				str := ConvertCP2U(w.String())
+				//log.Println(str)
+				m.DocContent = str
 			}
 		}
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
@@ -107,6 +156,8 @@ func (sw *SiteWatcher) DownloadPage(nam string, url string){
 	}
 
 	f(doc)
+
+	sw.UpdatePage(&m)
 }
 
 func (s *SiteWatcher) ProcessPages(b []byte){
@@ -183,23 +234,50 @@ func (s *SiteWatcher) ProcessPages(b []byte){
 
 }
 
+func (sw *SiteWatcher) WriteToFile(page string){
+	b, err := json.Marshal(sw.Pages[page])
+	if err == nil {
+		err = ioutil.WriteFile("./pages/" + page + ".json", b, 0644)
+	}
+}
+
+
+func (sw *SiteWatcher) StatFile(page string){
+	filename := "./pages/" + page + ".json"
+	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		log.Printf("Page: %s is new, adding to list of pages", page)
+		mp, ok := sw.Pages[page]
+		if ok {
+			mp.IsNew = true
+		} else {
+			log.Println("New Not Existing page!!!!")
+			mp = &MPage{
+				DocIdent: page,
+				IsNew: true,
+			}
+			mp.AddTrueLogo()
+			mp.AddYellowPageRemover()
+			mp.AddGoogleAnalytics()
+			sw.Pages[page] = mp
+			// TODO: Здесь делаем запись в файл
+		}
+		sw.WriteToFile(page)
+	}
+
+}
+
+func (sw *SiteWatcher) UpdatePage(page *MPage){
+	sw.Pages[page.DocIdent]= page
+	sw.StatFile(page.DocIdent)
+}
+
 
 func (s *SiteWatcher) AddPage(page string){
 
 	_, ok := s.Pages[page]
 	if !ok {
 		log.Printf("Adding new page %s", page)
-		filename := "./pages/" + page
-		var notExists bool
-		if _, err := os.Stat(filename); os.IsNotExist(err) {
-			log.Printf("Page: %s is new, adding to list of pages", page)
-			notExists = true
-		}
-		s.Pages[page] = MPage{
-			DocIdent: "page",
-			IsNew: notExists,
-		}
-
+		s.StatFile(page)
 	} else {
 		//log.Printf("Page %s is already exists", page)
 	}

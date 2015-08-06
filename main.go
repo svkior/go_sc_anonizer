@@ -25,6 +25,14 @@ func ConvertU2CP(in string) string{
 	return string(buf)
 }
 
+func ConvertCP2U(in string) string{
+	sr := strings.NewReader(in)
+	tr := transform.NewReader(sr, charmap.Windows1251.NewDecoder())
+	buf, _ := ioutil.ReadAll(tr)
+	return string(buf)
+}
+
+
 func (m *MPage) GetUrlValues() url.Values{
 
 
