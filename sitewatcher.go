@@ -46,13 +46,19 @@ func (m *MPage) AddYellowPageRemover(){
 }
 
 func NewSiteWatcher() *SiteWatcher{
-	return &SiteWatcher{
+	sw := SiteWatcher{
 		Pages: make(map [string]MPage),
+		Ai: adminIface{},
 	}
+
+	sw.Ai.getSession()
+	sw.Ai.getLogin()
+	return *sw
 }
 
 type SiteWatcher struct {
 	Pages  map[string]MPage
+	Ai *adminIface
 }
 
 func (s *SiteWatcher) AddPage(page string){
