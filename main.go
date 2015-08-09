@@ -123,6 +123,7 @@ func main(){
 
 	sw := NewSiteWatcher()
 	sw.readMain()
+	sw.webServer()
 
 	//as := adminIface{}
 	//go as.DoTheJob()

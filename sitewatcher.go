@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
+	"fmt"
 )
 
 
@@ -323,6 +324,13 @@ func (s *SiteWatcher) readMain() {
 		}
 	}
 	f(doc)
+}
+
+func (s *SiteWatcher) webServer(){
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
+		fmt.Fprintf(w, "Hello Gopher")
+	})
+	http.ListenAndServe(":3000", nil)
 }
 
 
