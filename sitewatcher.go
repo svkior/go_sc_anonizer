@@ -9,7 +9,17 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
-	"fmt"
+	"bitbucket.org/tts/go_webtest/artnet_test/element"
+	"bitbucket.org/tts/go_webtest/artnet_test/trace"
+	"time"
+	//"github.com/gorilla/websocket"
+	"bitbucket.org/tts/go_webtest/artnet_test/filewatcher"
+	"github.com/ant0ine/go-json-rest/rest"
+	"github.com/StephanDollberg/go-json-rest-middleware-jwt"
+	"sync"
+	"html/template"
+	"path/filepath"
+	"bitbucket.org/tts/go_webtest/artnet_test/fileconfigurator"
 )
 
 
@@ -326,11 +336,77 @@ func (s *SiteWatcher) readMain() {
 	f(doc)
 }
 
-func (s *SiteWatcher) webServer(){
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
-		fmt.Fprintf(w, "Hello Gopher")
+type templateHandler struct {
+	once sync.Once
+	filename string
+	templ *template.Template
+}
+
+func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request){
+	t.once.Do(func(){
+		t.templ = template.Must(template.ParseFiles(filepath.Join("templates", t.filename)))
 	})
-	http.ListenAndServe(":3000", nil)
+	t.templ.Execute(w, nil)
 }
 
 
+func NewRestInterface(device *element.Device){
+	jwt_middleware := &jwt.JWTMiddleware{
+		Key:        []byte("secret key"),
+		Realm:      "jwt auth",
+		Timeout:    time.Hour,
+		MaxRefresh: time.Hour * 24,
+		Authenticator: func(userId string, password string) bool {
+			return userId == "admin" && password == "admin"
+		}}
+	api := rest.NewApi()
+	api.Use(rest.DefaultDevStack...)
+	api.Use(&rest.IfMiddleware{
+		Condition: func(request *rest.Request) bool {
+			return request.URL.Path != "/login"
+		},
+		IfTrue: jwt_middleware,
+	})
+
+	router, err := rest.MakeRouter(
+		rest.Post("/login", jwt_middleware.LoginHandler),
+		rest.Get("/refresh_token", jwt_middleware.RefreshHandler),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	api.SetApp(router)
+	http.Handle("/assets/", http.StripPrefix("/assets", http.FileServer(http.Dir("./assets"))))
+	http.Handle("/", &templateHandler{filename:"main.html"})
+	http.Handle("/device", device)
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func (sw *SiteWatcher) webInterfaceRun(){
+	log.Println("*** Starting Device ***")
+	// Создаем новое устройство
+	device := element.NewDevice()
+	device.Tracer = trace.New(os.Stdout)
+
+	// Запускаем на выполнение
+	device.Run()
+	// Добавляем конфигуратор
+	device.AddElement(
+		fileconfigurator.NewFileConfig("test.json"),
+	)
+	// Запускаем конфигуратор на выполнение
+	device.SendMessage(element.GetEmptyMessage("load", true))
+
+	// Запускаем FileWatcher
+	fw := filewatcher.NewFileWatcher("./assets/main.js")
+	device.AddElement(fw)
+
+	// Уходим в главный цикл программы
+
+	go NewRestInterface(device)
+
+	device.Wait()
+	log.Println("Quit()")
+
+}
