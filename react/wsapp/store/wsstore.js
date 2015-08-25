@@ -8,9 +8,16 @@ import WSActions from "../actions/wsactions.js"
 
 var WSStore = Reflux.createStore({
     listenables: [WSActions],
+    onWsRegisterFeed: function(channel, actionClass){
+        //console.log('Channel: ', channel);
+        //console.log('actionClass: ', actionClass);
+        this.onWsSubscribe(channel);
+        this.wsActions[channel] = actionClass;
+    },
     onWsSubscribe: function(channel){
         var m ={
             type: "subscribe",
+            broadcast: true,
             name: channel
         };
         if(this.socket){
@@ -20,9 +27,10 @@ var WSStore = Reflux.createStore({
     },
     onSendMessage: function(msg){
         var m = {
-            type: "status",
+            type: "message",
+            name: "chatroom",
             payload: {
-                Message: "тестовое сообщение"
+                Message: msg
             }
         };
         if(this.socket){
@@ -31,6 +39,7 @@ var WSStore = Reflux.createStore({
     },
     processMessage(msg){
         var un = JSON.parse(msg);
+        console.log(un);
 
         if(un && un.type){
             // У нас есть тип сообщения
@@ -40,8 +49,16 @@ var WSStore = Reflux.createStore({
             }
         }
 
+        if(un && un.name){
+            //console.log("NAME: ", un.name);
+            if(this.wsActions[un.name]){
+                //console.log("We have actions!!!!");
+                this.wsActions[un.name].gotMessage(un);
+            }
+        }
+
         this.messages.push(msg);
-        if(this.messages.length > 15){
+        if(this.messages.length > 10){
             this.messages.splice (0, 1);
         }
         this.trigger(this.messages);
@@ -64,6 +81,7 @@ var WSStore = Reflux.createStore({
         }.bind(this);
     },
     init(){
+        this.wsActions = {};
         if(!window["WebSocket"]){
             alert("Error: Your browser does not support web sockets.");
             this.messages = [];

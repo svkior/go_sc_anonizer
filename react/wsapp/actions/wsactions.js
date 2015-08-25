@@ -8,7 +8,9 @@ var WSActions = Reflux.createActions([
     "connected",    // Экшн вызывается, если соединение установлено
     "disconnected",  // Экшн вызывается, если соединение разорвано
     // wsSubscribe - подписывание на обновление коллекции
-    "wsSubscribe"
+    "wsSubscribe",
+    // wsRegisterFeed - Создание соединения
+    "wsRegisterFeed"
 ]);
 
 export default WSActions;

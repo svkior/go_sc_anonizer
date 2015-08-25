@@ -1,6 +1,6 @@
 /**
- * Created by s.kior on 23.07.2015.
- */
+    * Created by s.kior on 23.07.2015.
+    */
 import Reflux from 'reflux'
 
 import StatusActions from "../actions/status_actions.js"
@@ -13,6 +13,7 @@ var StatusStore = Reflux.createStore({
     listenables: [StatusActions],
     onWsconnected(){
         console.log("StatusStore: Connected!!!!!!");
+        WSActions.wsSubscribe('respawn');
         WSActions.wsSubscribe('ticker');
     },
     init(){
