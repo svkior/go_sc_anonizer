@@ -25,6 +25,11 @@ var WSStore = Reflux.createStore({
         }
 
     },
+    onPostMsg(msg){
+        if(this.socket){
+            this.socket.send(JSON.stringify(msg));
+        }
+    },
     onSendMessage: function(msg){
         var m = {
             type: "message",

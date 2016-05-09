@@ -1,1 +1,13 @@
-{"DocTitle":"Прайс","ParentId":"","LangId":"","DocIdent":"price","DocContent":"\u0026lt;p\u0026gt;Раздел находится в стадии разработки.\u0026lt;/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026amp;nbsp;\u0026lt;/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026amp;nbsp;\u0026lt;/p\u0026gt;\n\u0026lt;script\u0026gt;\nqq = document.querySelector(\u0026#34;#topright\u0026#34;);\nqq.style.backgroundImage = \u0026#34;url(http://support.ttsy.ru/topright.gif)\u0026#34;;\n//foot = document.querySelectorAll(\u0026#34;#footer tr td span\u0026#34;)[2];\n//foot.innerHTML = \u0026#39;тел.: +7 (495) 969-63-56; +7 (495) 542-17-72 | e-mail: scircus2@list.ru | +7 (495) 730-83-45 | e-mail: \u0026lt;a href=\u0026#34;mailto:info@ttsy.ru\u0026#34;\u0026gt;info@ttsy.ru\u0026lt;/a\u0026gt;\u0026#39;;\n\u0026lt;/script\u0026gt;","Cat":"","DocId":"61","Title":"","Descr":"","Kw":"","IsNew":true}
+{
+  "DocTitle": "Прайс",
+  "ParentId": "",
+  "LangId": "",
+  "DocIdent": "price",
+  "DocContent": "\u0026lt;p\u0026gt;\u0026amp;nbsp;\u0026lt;/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026amp;nbsp;\u0026lt;/p\u0026gt;",
+  "Cat": "",
+  "DocId": "61",
+  "Title": "",
+  "Descr": "",
+  "Kw": "",
+  "IsNew": true
+}

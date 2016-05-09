@@ -1,61 +1,12 @@
 package main
 
 import (
-	"io/ioutil"
-	"log"
-	"net/http"
-	"strings"
-	"time"
-	"net/url"
-	"golang.org/x/text/transform"
-	"golang.org/x/text/encoding/charmap"
+	"bitbucket.org/svkior/go_sc_anonizer/sitewatcher"
 )
 
 const PAGE_ID = "contacts1"
 
-
-
-
-
-
-func ConvertU2CP(in string) string{
-	sr := strings.NewReader(in)
-	tr := transform.NewReader(sr, charmap.Windows1251.NewEncoder())
-	buf, _ := ioutil.ReadAll(tr)
-	return string(buf)
-}
-
-func ConvertCP2U(in string) string{
-	sr := strings.NewReader(in)
-	tr := transform.NewReader(sr, charmap.Windows1251.NewDecoder())
-	buf, _ := ioutil.ReadAll(tr)
-	return string(buf)
-}
-
-
-func (m *MPage) GetUrlValues() url.Values{
-
-
-	return url.Values{
-		"doc_title": {ConvertU2CP(m.DocTitle)},
-		"parent_id": {ConvertU2CP(m.ParentId)},
-		"lang_id": {ConvertU2CP(m.LangId)},
-		"doc_ident": {ConvertU2CP(m.DocIdent)},
-		"DocumentContent": {ConvertU2CP(m.DocContent)},
-		"cat": {ConvertU2CP(m.Cat)},
-		"doc_id": {ConvertU2CP(m.DocId)},
-		"title": {ConvertU2CP(m.Title)},
-		"descr": {ConvertU2CP(m.Descr)},
-		"kw": {ConvertU2CP(m.Kw)},
-	}
-}
-
-
-
-
-
-
-
+/*
 
 const PAGE_BODY = `
 <div>
@@ -90,7 +41,6 @@ if(inc < 1){
 
 
 
-
 func mainOld() {
 	ticker := time.NewTicker(60 * time.Second)
 	quit := make(chan bool)
@@ -119,11 +69,10 @@ func mainOld() {
 	<- quit
 }
 
-func main(){
+*/
 
-	sw := NewSiteWatcher()
-	sw.readMain()
-	sw.webInterfaceRun()
+func main(){
+	sitewatcher.WebInterfaceRun()
 
 	//as := adminIface{}
 	//go as.DoTheJob()

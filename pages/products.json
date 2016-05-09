@@ -1,1 +1,13 @@
-{"DocTitle":"Продукция","ParentId":"","LangId":"","DocIdent":"products","DocContent":"\u0026lt;p\u0026gt;Выберите интересующую Вас категорию товаров в меню слева, используйте левую кнопку мыши для открытия подразделов внутри меню.\u0026amp;nbsp;\u0026lt;/p\u0026gt;\n\u0026lt;script\u0026gt;\nqq = document.querySelector(\u0026#34;#topright\u0026#34;);\nqq.style.backgroundImage = \u0026#34;url(/circ/catalog/uploads/topright.gif)\u0026#34;;\n\u0026lt;/script\u0026gt;\n","Cat":"","DocId":"62","Title":"Продукция","Descr":"","Kw":"","IsNew":true}
+{
+  "DocTitle": "Продукция",
+  "ParentId": "",
+  "LangId": "",
+  "DocIdent": "products",
+  "DocContent": "\u0026lt;p\u0026gt;\u0026amp;nbsp;\u0026lt;/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026amp;nbsp;\u0026lt;/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026amp;nbsp;\u0026lt;/p\u0026gt;\n\u0026lt;p\u0026gt;\u0026amp;nbsp;\u0026lt;/p\u0026gt;",
+  "Cat": "",
+  "DocId": "62",
+  "Title": "Продукция",
+  "Descr": "",
+  "Kw": "",
+  "IsNew": true
+}

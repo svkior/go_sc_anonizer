@@ -1,1 +1,13 @@
-{"DocTitle":"","ParentId":"","LangId":"","DocIdent":"partners","DocContent":"\n\u003cscript\u003e\nqq = document.querySelector(\"#topright\");\nqq.style.backgroundImage = \"url(http://support.ttsy.ru/topright.gif)\";\n\u003c/script\u003e\n\n\u003cscript\u003e\n\tsetTimeout(function(){\n\t\tfoot = document.getElementById(\"footer\");\n\t\tfoot.parentNode.parentNode.removeChild(foot.parentNode);\n\t}, 30);\n\u003c/script\u003e\n\t\n\u003cscript\u003e\n  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n\n  ga('create', 'UA-66058123-1', 'auto');\n  ga('send', 'pageview');\n\n\u003c/script\u003e\n","Cat":"","DocId":"","Title":"","Descr":"","Kw":"","IsNew":true}
+{
+  "DocTitle": "",
+  "ParentId": "",
+  "LangId": "",
+  "DocIdent": "partners",
+  "DocContent": "\n\u003cscript\u003e\nqq = document.querySelector(\"#topright\");\nqq.style.backgroundImage = \"url(http://support.ttsy.ru/topright.gif)\";\n\u003c/script\u003e\n\n\u003cscript\u003e\n\tsetTimeout(function(){\n\t\tfoot = document.getElementById(\"footer\");\n\t\tfoot.parentNode.parentNode.removeChild(foot.parentNode);\n\t}, 30);\n\u003c/script\u003e\n\t\n\u003cscript\u003e\n  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n\n  ga('create', 'UA-66058123-1', 'auto');\n  ga('send', 'pageview');\n\n\u003c/script\u003e\n",
+  "Cat": "",
+  "DocId": "",
+  "Title": "",
+  "Descr": "",
+  "Kw": "",
+  "IsNew": true
+}
